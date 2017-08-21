@@ -22,13 +22,15 @@ var p51;
 var p61;
 var p71;
 var p81;
+var checkbox;
 
 function setup() {
   createCanvas(windowWidth - 170, windowHeight - 10); //1200, 600);
+  checkbox = createCheckbox('Tick to seek mouse, untick to repel', false);
   numBoids = 100;
   b = [];
   for (i = 0; i < numBoids; i++) {
-    b[i] = new boid(random(width),random(height));
+    b[i] = new boid(random(width), random(height));
   }
   slider1 = createSlider(0, 100, 50);
   slider2 = createSlider(0, 100, 30);
@@ -77,6 +79,7 @@ function setup() {
   p71.position(width + 135, 280);
   p81 = createP(slider8.value());
   p81.position(width + 135, 325);
+  checkbox.position(width + 2, 370);
   setFrameRate(50);
 }
 
@@ -85,8 +88,11 @@ function draw() {
   fill(0, 0, 0, 50)
   for (i = 0; i < b.length; i++) {
     b[i].find(b.slice(), i);
-    //b[i].seek(mouseX, mouseY);
-    b[i].repel(mouseX, mouseY);
+    if (checkbox.checked() == true) {
+      b[i].seek(mouseX, mouseY);
+    }else{
+      b[i].repel(mouseX, mouseY);
+    }
     b[i].allign();
     b[i].seperation();
     b[i].cohesion(i);
@@ -115,11 +121,10 @@ function draw() {
   p61.html(slider6.value());
   p71.html(slider7.value());
   p81.html(slider8.value());
-  
-  if (mouseIsPressed && mouseX < width && mouseY < height){
-    b[b.length] = new boid(mouseX,mouseY);
+
+  if (mouseIsPressed && mouseX < width && mouseY < height) {
+    b[b.length] = new boid(mouseX, mouseY);
   }
-  //console.log(frameRate());
 }
 
 function windowResized() {
